@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">SPICaMusicCompose</string>
+    <string name="contine_to_scanner">已授权,继续</string>
+    <string name="requset_permission">授权</string>
+    <string name="scanner">扫描</string>
 </resources>

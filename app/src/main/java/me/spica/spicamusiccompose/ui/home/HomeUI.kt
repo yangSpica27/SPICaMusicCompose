@@ -7,8 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavOptions
-import me.spica.spicamusiccompose.persistence.PermissionUtils
+import me.spica.spicamusiccompose.utils.PermissionUtils
 import me.spica.spicamusiccompose.ui.navgation.NavScreen
 import me.spica.spicamusiccompose.ui.navgation.Navigator
 
@@ -21,13 +20,5 @@ fun HomeUI() {
         }
     }
 
-    if (!PermissionUtils.hasStoragePermission(LocalContext.current)){
-        Navigator.current.navigate(NavScreen.OnBoarding.route){
-            popUpTo(NavScreen.Home.route){
-                inclusive = true
-            }
-            launchSingleTop = true
-        }
-    }
 
 }

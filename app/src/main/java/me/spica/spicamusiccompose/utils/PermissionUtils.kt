@@ -1,4 +1,4 @@
-package me.spica.spicamusiccompose.persistence
+package me.spica.spicamusiccompose.utils
 
 import android.Manifest
 import android.content.Context
