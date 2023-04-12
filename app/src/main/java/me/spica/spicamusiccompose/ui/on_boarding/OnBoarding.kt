@@ -45,7 +45,7 @@ fun OnBoardingUI(
 
     if (isSuccess.value) {
         Navigator.current.navigate(NavScreen.Home.route) {
-            popUpTo(NavScreen.Home.route) {
+            popUpTo(NavScreen.OnBoarding.route) {
                 inclusive = true
             }
             launchSingleTop = true
