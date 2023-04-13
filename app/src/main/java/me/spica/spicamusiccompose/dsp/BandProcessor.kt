@@ -1,7 +1,6 @@
 package me.spica.spicamusiccompose.dsp
 
-import me.spica.music.dsp.NyquistBand
-import me.spica.music.dsp.fromDb
+
 import timber.log.Timber
 import kotlin.math.*
 

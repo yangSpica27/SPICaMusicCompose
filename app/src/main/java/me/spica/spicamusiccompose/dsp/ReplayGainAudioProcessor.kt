@@ -4,10 +4,10 @@ import androidx.core.math.MathUtils
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.audio.AudioProcessor
 import com.google.android.exoplayer2.audio.BaseAudioProcessor
-import me.spica.music.dsp.ByteUtils.Int24_MAX_VALUE
-import me.spica.music.dsp.ByteUtils.Int24_MIN_VALUE
-import me.spica.music.dsp.ByteUtils.getInt24
-import me.spica.music.dsp.ByteUtils.putInt24
+import me.spica.spicamusiccompose.dsp.ByteUtils.Int24_MAX_VALUE
+import me.spica.spicamusiccompose.dsp.ByteUtils.Int24_MIN_VALUE
+import me.spica.spicamusiccompose.dsp.ByteUtils.getInt24
+import me.spica.spicamusiccompose.dsp.ByteUtils.putInt24
 import java.nio.ByteBuffer
 
 

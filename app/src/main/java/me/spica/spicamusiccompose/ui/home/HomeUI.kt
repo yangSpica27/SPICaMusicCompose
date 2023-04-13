@@ -1,6 +1,7 @@
 package me.spica.spicamusiccompose.ui.home
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -26,11 +27,8 @@ import me.spica.spicamusiccompose.ui.player.PlayerUI
 fun HomeUI(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-
     val selectIndexState = remember { homeViewModel.selectIndex }
-
     val nowPlaylistViewModel: NowPlaylistViewModel = hiltViewModel()
-
     Scaffold(
         bottomBar = {
             Column {
@@ -39,13 +37,18 @@ fun HomeUI(
             }
         }
     ) { contentPadding ->
-        Box(modifier = Modifier.padding(contentPadding)) {
-            Column {
+        Box(
+            modifier = Modifier
+                .padding(contentPadding)
+                .fillMaxSize()
+        ) {
+            Column(Modifier.fillMaxSize()) {
                 Crossfade(
-                    selectIndexState,
+                    targetState = selectIndexState,
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    animationSpec = tween(durationMillis = 500)
                 ) { dest ->
                     when (dest.value) {
                         0 -> NowPlayListUI(nowPlaylistViewModel = nowPlaylistViewModel)

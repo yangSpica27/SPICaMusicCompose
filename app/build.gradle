@@ -117,5 +117,7 @@ dependencies {
     implementation 'com.github.paramsen:noise:2.0.0'
     implementation 'com.drakeet.multitype:multitype:4.3.0'
 
+    implementation "com.airbnb.android:lottie-compose:6.0.0"
+
 
 }

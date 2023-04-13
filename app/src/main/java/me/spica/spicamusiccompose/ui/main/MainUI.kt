@@ -1,5 +1,6 @@
 package me.spica.spicamusiccompose.ui.main
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +11,7 @@ import me.spica.spicamusiccompose.ui.navgation.Navigator
 import me.spica.spicamusiccompose.ui.navgation.ProvideNavHostController
 import me.spica.spicamusiccompose.ui.on_boarding.OnBoardingUI
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainUI() {
     ProvideMultiViewModel {
