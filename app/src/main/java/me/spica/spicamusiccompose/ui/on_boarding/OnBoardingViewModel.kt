@@ -11,13 +11,15 @@ import kotlinx.coroutines.launch
 import me.spica.spicamusiccompose.audio.scanner.FlowEvent
 import me.spica.spicamusiccompose.audio.scanner.MediaStoreMediaProvider
 import me.spica.spicamusiccompose.audio.scanner.MessageProgress
+import me.spica.spicamusiccompose.persistence.dao.SongDao
 import me.spica.spicamusiccompose.ui.navgation.Navigator
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
-    private val mediaStoreMediaProvider: MediaStoreMediaProvider
+    private val mediaStoreMediaProvider: MediaStoreMediaProvider,
+    private val songDao: SongDao
 ) : ViewModel() {
 
     private val _scannerProgressState: MutableState<MessageProgress> = mutableStateOf(MessageProgress("准备中", null))
@@ -43,6 +45,8 @@ class OnBoardingViewModel @Inject constructor(
                         _scannerProgressState.value = event.data
                     }
                     is FlowEvent.Success -> {
+                        songDao.deleteAllSync()
+                        songDao.insertSync(event.result)
                         _isSuccess.value = true
                     }
                 }

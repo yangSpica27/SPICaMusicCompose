@@ -3,4 +3,32 @@
     <string name="contine_to_scanner">已授权,继续</string>
     <string name="requset_permission">授权</string>
     <string name="scanner">扫描</string>
+    <string name="now_play_list">播放列表</string>
+    <string name="mine">我的</string>
+    <string name="now_playing">正在播放</string>
+    <string name="local">本地</string>
+    <string name="add_rencently">最近新增</string>
+    <string name="collected">收藏</string>
+    <string name="shuffle">随机</string>
+
+    <string name="playing">正在播放</string>
+    <string name="queue">播放列表</string>
+    <string name="select_all">选择全部</string>
+    <string name="select_none">全不选</string>
+    <string name="eq_preset_flat">原始</string>
+    <string name="eq_preset_custom">自定义</string>
+    <string name="eq_preset_bass_boost">低音增强</string>
+    <string name="eq_preset_bass_reduce">低音减弱</string>
+    <string name="eq_preset_vocal_boost">人声增强</string>
+    <string name="eq_preset_vocal_Reduce">人声减弱</string>
+    <string name="dsp_replay_gain_title">回放增益</string>
+    <string name="dsp_replay_gain_track">曲目增益</string>
+    <string name="dsp_replay_gain_album">专辑增益</string>
+    <string name="dsp_replay_gain_off">关</string>
+    <string name="dsp_dialog_frequency_response_title">频率响应</string>
+    <string name="dsp_replay_gain_hint_mode">模式</string>
+    <string name="dsp_preamp">前级</string>
+    <string name="dsp_equalizer_title">均衡器</string>
+    <string name="dsp_equalizer_hint_preset">预设</string>
+    <string name="dsp_frequency_response_curve_title">频响曲线</string>
 </resources>

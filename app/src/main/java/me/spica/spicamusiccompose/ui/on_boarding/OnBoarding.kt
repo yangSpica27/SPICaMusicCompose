@@ -41,7 +41,7 @@ fun OnBoardingUI(
 
     val pagerState = rememberPagerState()
 
-    val isSuccess = remember { onBoardingViewModel.isSuccess}
+    val isSuccess = remember { onBoardingViewModel.isSuccess }
 
     if (isSuccess.value) {
         Navigator.current.navigate(NavScreen.Home.route) {
@@ -149,14 +149,13 @@ fun ScannerPager(viewModel: OnBoardingViewModel) {
                     Text(text = stringResource(R.string.scanner))
                 }
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
 
 @Composable
 fun ScannerWidget(viewModel: OnBoardingViewModel) {
+
     val isScannerState = rememberSaveable { viewModel.isScanner }
 
     val scannerProgressState = remember { viewModel.scannerProgressState }
@@ -186,7 +185,11 @@ fun ScannerWidget(viewModel: OnBoardingViewModel) {
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = scannerProgressState.value.message, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.End)
+            Text(
+                text = scannerProgressState.value.message,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.End
+            )
         }
     } else {
         Column(
