@@ -1,6 +1,5 @@
 package me.spica.spicamusiccompose.ui.main
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,7 +10,6 @@ import me.spica.spicamusiccompose.ui.navgation.Navigator
 import me.spica.spicamusiccompose.ui.navgation.ProvideNavHostController
 import me.spica.spicamusiccompose.ui.on_boarding.OnBoardingUI
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainUI() {
     ProvideMultiViewModel {
@@ -19,7 +17,7 @@ fun MainUI() {
             NavHost(
                 navController = Navigator.current,
                 // 默认进入的页面
-                startDestination = NavScreen.Home.route
+                startDestination = NavScreen.OnBoarding.route
             ) {
                 composable(route = NavScreen.Home.route) {
                     HomeUI()

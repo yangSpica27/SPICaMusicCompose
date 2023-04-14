@@ -31,4 +31,10 @@
     <string name="dsp_equalizer_title">均衡器</string>
     <string name="dsp_equalizer_hint_preset">预设</string>
     <string name="dsp_frequency_response_curve_title">频响曲线</string>
+    <string name="please_give_permisstion">请授予应用正常运行所需要的必要权限</string>
+    <string name="lets_go">Let\'s go!</string>
+    <string name="please_give_permisstion_help_text">要查找您的音乐，需要您授予媒体存储读取权限</string>
+    <string name="playlist_select">开始选择一个播放歌单</string>
+    <string name="no_playing">没有正在播放的歌曲</string>
+    <string name="clear">清除</string>
 </resources>

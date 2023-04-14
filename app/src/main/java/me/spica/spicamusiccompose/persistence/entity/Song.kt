@@ -21,12 +21,13 @@ data class Song constructor(
     val duration: Long,
     var sort: Int,
     var playTimes: Int,
-    var lastPlayTime: Int
+    var lastPlayTime: Int,
+    var albumId: Long
 ) {
 
 
     fun getCoverUri(): Uri {
-        return mediaStoreId.toCoverUri()
+        return albumId.toCoverUri()
     }
 
     fun getSongUri(): Uri {
@@ -68,8 +69,6 @@ data class Song constructor(
         result = 31 * result + lastPlayTime
         return result
     }
-
-
 
 
 }

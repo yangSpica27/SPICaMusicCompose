@@ -1,12 +1,28 @@
 package me.spica.spicamusiccompose.ui.player
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -14,48 +30,81 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import me.spica.spicamusiccompose.R
 import me.spica.spicamusiccompose.persistence.entity.Song
-import me.spica.spicamusiccompose.ui.common.ViewModelProvider
 import me.spica.spicamusiccompose.ui.theme.ColorTheme
 import me.spica.spicamusiccompose.ui.theme.GRAY3
-import me.spica.spicamusiccompose.ui.viewmodel.PlayStateViewModel
 
 @Composable
 fun PlayerUI(
-    playStateViewModel: PlayStateViewModel = ViewModelProvider.playState
+    currentSong: State<Song?>
 ) {
-    val configuration = LocalConfiguration.current
-    val currentSong = playStateViewModel.currentSongFlow.collectAsState(initial = null)
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.statusBarsPadding())
-            TitleBar(song = currentSong.value)
-            Spacer(modifier = Modifier.height(8.dp))
-            Box(
-                modifier = Modifier
-                    .width(configuration.screenWidthDp.dp)
-                    .height(configuration.screenWidthDp.dp)
-                    .padding(horizontal = 22.dp)
-            ) {
-                Card(modifier = Modifier.fillMaxSize(), backgroundColor = GRAY3) {
-
-                }
+        Crossfade(targetState = currentSong.value == null) { isEmpty ->
+            if (isEmpty) {
+                EmptyContent()
+            } else {
+                PlayContent(currentSong = currentSong)
             }
-            Spacer(modifier = Modifier.weight(1f))
-            SeekContent(song = currentSong.value, positionDs = 0, isPlay = false)
-            ControllerContent()
-            Spacer(modifier = Modifier.height(20.dp))
         }
+    }
+}
+
+@Composable
+private fun EmptyContent() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AsyncImage(
+            model = R.drawable.plates_empty_re_opql,
+            contentDescription = null,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        TextButton(onClick = { }) {
+            Text(
+                text = stringResource(id = R.string.no_playing),
+                style = MaterialTheme.typography.button
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlayContent(currentSong: State<Song?>) {
+    val configuration = LocalConfiguration.current
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.statusBarsPadding())
+        TitleBar(song = currentSong.value)
+        Spacer(modifier = Modifier.height(8.dp))
+        Box(
+            modifier = Modifier
+                .width(configuration.screenWidthDp.dp)
+                .height(configuration.screenWidthDp.dp)
+                .padding(horizontal = 22.dp)
+        ) {
+            Card(modifier = Modifier.fillMaxSize(), backgroundColor = GRAY3) {
+
+            }
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        SeekContent(song = currentSong.value, positionDs = 0, isPlay = false)
+        ControllerContent()
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 

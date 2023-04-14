@@ -3,6 +3,7 @@ package me.spica.spicamusiccompose.ui.on_boarding
 import android.Manifest
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -10,20 +11,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -82,26 +82,50 @@ fun StoragePermissionPager(pagerState: PagerState) {
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Card(
+            Box(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
+                    .padding(22.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Text(text = "图片")
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            if (permissionState.status.isGranted) {
-                Button(onClick = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(1)
-                    }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(
+                        text = stringResource(R.string.lets_go),
+                        style = MaterialTheme.typography.h4,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    AsyncImage(
+                        model = R.drawable.plates_confirmation_re_b6q5,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = stringResource(R.string.please_give_permisstion_help_text),
+                        style = MaterialTheme.typography.h6, modifier = Modifier.alpha(.6f)
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
+            }
+            if (permissionState.status.isGranted) {
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(1)
+                        }
+                    }, modifier = Modifier
+                        .padding(horizontal = 22.dp)
+                        .fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.contine_to_scanner))
                 }
@@ -117,7 +141,7 @@ fun StoragePermissionPager(pagerState: PagerState) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
         }
 
@@ -130,11 +154,26 @@ fun ScannerPager(viewModel: OnBoardingViewModel) {
     val isScanner = rememberSaveable { viewModel.isScanner }
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
-            Card(
+            Box(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
             ) {
+                Crossfade(targetState = isScanner.value) { isScanner ->
+                    if (isScanner) {
+                        ScannerWidget(viewModel = viewModel)
+                    } else {
+                        Column(Modifier.fillMaxWidth()) {
+                            AsyncImage(
+                                model = R.drawable.plates_not_found_re_bh2e,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                            )
+                        }
+                    }
+                }
                 ScannerWidget(viewModel = viewModel)
             }
 
@@ -149,6 +188,7 @@ fun ScannerPager(viewModel: OnBoardingViewModel) {
                     Text(text = stringResource(R.string.scanner))
                 }
             }
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

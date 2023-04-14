@@ -23,7 +23,7 @@ class MediaStoreMediaProvider(private val context: Context) : MediaProvider {
     override fun findSongs(): Flow<FlowEvent<List<Song>, MessageProgress>> =
         flow {
             val songs = arrayListOf<Song>()
-
+            Thread.sleep(300)
             val songCursor = context.contentResolverSafe.query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 localAudioColumns,
@@ -48,6 +48,7 @@ class MediaStoreMediaProvider(private val context: Context) : MediaProvider {
                         playTimes = -1,
                         lastPlayTime = -1,
                         duration = songCursor.getLongOrNull(songCursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DURATION)) ?: 0,
+                        albumId = songCursor.getLong(songCursor.getColumnIndexOrThrow(MediaStore.Audio.AlbumColumns.ALBUM_ID))
                     )
                     songs.add(song)
                     progress++
