@@ -27,6 +27,8 @@ import coil.compose.AsyncImage
 import me.spica.spicamusiccompose.R
 import me.spica.spicamusiccompose.persistence.entity.Song
 import me.spica.spicamusiccompose.ui.common.ViewModelProvider
+import me.spica.spicamusiccompose.ui.navgation.NavScreen
+import me.spica.spicamusiccompose.ui.navgation.Navigator
 import me.spica.spicamusiccompose.ui.theme.GRAY3
 import me.spica.spicamusiccompose.ui.viewmodel.LocalMusicViewModel
 import me.spica.spicamusiccompose.ui.viewmodel.PlayStateViewModel
@@ -38,6 +40,7 @@ fun MineUI(
     playStateViewModel: PlayStateViewModel = ViewModelProvider.playState
 ) {
     val localSongs = localMusicViewModel.songs.collectAsState(initial = listOf())
+    val navigator = Navigator.current
     Box(
         modifier = Modifier
             .background(Color.White)
@@ -74,7 +77,9 @@ fun MineUI(
                     MineFuncButton(
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { }, icon = R.drawable.ic_cd_music_cd, title = stringResource(id = R.string.local), tintColor = Color(0xffFF9100)
+                            .clickable {
+                                navigator.navigate(NavScreen.LocalMusic.route)
+                            }, icon = R.drawable.ic_cd_music_cd, title = stringResource(id = R.string.local), tintColor = Color(0xffFF9100)
                     )
                     MineFuncButton(
                         modifier = Modifier

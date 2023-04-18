@@ -37,4 +37,7 @@
     <string name="playlist_select">开始选择一个播放歌单</string>
     <string name="no_playing">没有正在播放的歌曲</string>
     <string name="clear">清除</string>
+    <string name="local_music">本地音乐\n</string>
+    <string name="no_data">暂无数据</string>
+    <string name="no_more_data">没有更多了</string>
 </resources>

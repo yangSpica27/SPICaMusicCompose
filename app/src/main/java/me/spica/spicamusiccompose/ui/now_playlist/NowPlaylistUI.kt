@@ -211,7 +211,7 @@ private fun MediaItem(
 
 
 @Composable
-fun TitleBar() {
+private fun TitleBar() {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background, contentPadding = PaddingValues(horizontal = 22.dp), modifier = Modifier.statusBarsPadding(), elevation = 0.dp
     ) {
