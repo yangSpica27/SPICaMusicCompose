@@ -69,12 +69,7 @@ fun HomeUI(
                         LoadingContent()
                     } else {
                         when (currentIndex) {
-                            0 -> NowPlayListUI(
-                                listState = mainListState,
-                                songList = playList,
-                                playingSong = playingSong
-                            )
-
+                            0 -> NowPlayListUI(listState = mainListState, songList = playList, playingSong = playingSong)
                             1 -> PlayerUI(currentSong = playingSong)
                             2 -> MineUI()
                         }

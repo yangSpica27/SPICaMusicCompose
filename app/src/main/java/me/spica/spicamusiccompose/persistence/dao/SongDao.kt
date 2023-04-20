@@ -27,6 +27,11 @@ interface SongDao {
     )
     fun getsSongsFromName(name: String): Flow<List<Song>>
 
+    @Query(
+        "SELECT * FROM song WHERE displayName LIKE '%' ||:name|| '%'" +
+            "OR artist LIKE '%' ||:name|| '%'"
+    )
+    fun getsSongsFromNameSync(name: String): List<Song>
 
     @Query("SELECT * FROM song WHERE songId == :id")
     fun getSongWithId(id: Long): Song
@@ -39,6 +44,9 @@ interface SongDao {
 
     @Query("SELECT * FROM song")
     fun getAll(): Flow<List<Song>>
+
+    @Query("SELECT * FROM song")
+    fun getAllSync(): List<Song>
 
     @Query("SELECT * FROM song WHERE `like` == 1")
     fun getAllLikeSong(): Flow<List<Song>>

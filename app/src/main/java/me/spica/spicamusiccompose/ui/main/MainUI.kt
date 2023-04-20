@@ -10,6 +10,7 @@ import me.spica.spicamusiccompose.ui.navgation.NavScreen
 import me.spica.spicamusiccompose.ui.navgation.Navigator
 import me.spica.spicamusiccompose.ui.navgation.ProvideNavHostController
 import me.spica.spicamusiccompose.ui.on_boarding.OnBoardingUI
+import me.spica.spicamusiccompose.ui.song_search.SongSearchUI
 
 @Composable
 fun MainUI() {
@@ -26,8 +27,11 @@ fun MainUI() {
                 composable(route = NavScreen.OnBoarding.route) {
                     OnBoardingUI()
                 }
-                composable(route = NavScreen.LocalMusic.route){
+                composable(route = NavScreen.LocalMusic.route) {
                     LocalMusicUI()
+                }
+                composable(route = NavScreen.SongSearch.route) {
+                    SongSearchUI()
                 }
             }
         }

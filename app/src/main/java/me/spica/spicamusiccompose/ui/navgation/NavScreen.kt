@@ -20,4 +20,7 @@ sealed class NavScreen(val route: String) {
     // 歌单
     object Playlists:NavScreen("Playlists")
 
+    // 搜索
+    object SongSearch:NavScreen("SongSearch")
+
 }
