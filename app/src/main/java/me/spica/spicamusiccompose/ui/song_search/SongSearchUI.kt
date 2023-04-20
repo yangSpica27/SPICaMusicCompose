@@ -80,7 +80,9 @@ private fun EmptyPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 24.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+            .padding(bottom = 24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(model = R.drawable.plates_select_re_3kbd, contentDescription = null)
         Spacer(modifier = Modifier.height(24.dp))

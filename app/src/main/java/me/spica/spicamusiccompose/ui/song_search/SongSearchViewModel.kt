@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import me.spica.spicamusiccompose.persistence.dao.SongDao
 import me.spica.spicamusiccompose.persistence.entity.Song
@@ -17,7 +17,7 @@ class SongSearchViewModel @Inject constructor(
     private val songDao: SongDao
 ) : ViewModel() {
 
-    private val _songs = MutableSharedFlow<List<Song>>()
+    private val _songs = MutableStateFlow<List<Song>>(listOf())
 
     val songs: Flow<List<Song>> = _songs
 
