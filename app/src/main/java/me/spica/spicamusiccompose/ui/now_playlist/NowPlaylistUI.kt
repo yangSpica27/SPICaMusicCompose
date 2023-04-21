@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,12 +20,13 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,7 +47,6 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import me.spica.spicamusiccompose.R
 import me.spica.spicamusiccompose.persistence.entity.Song
 import me.spica.spicamusiccompose.ui.common.ViewModelProvider
-import me.spica.spicamusiccompose.ui.theme.GRAY3
 import me.spica.spicamusiccompose.ui.viewmodel.PlayStateViewModel
 
 
@@ -116,11 +116,11 @@ private fun ListHeader(playingSong: State<Song?>) {
                 Column {
                     Text(
                         text = playingSong.value?.displayName ?: "",
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
                         text = playingSong.value?.artist ?: "",
-                        style = MaterialTheme.typography.subtitle1,
+                        style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.alpha(.6f)
                     )
                 }
@@ -134,19 +134,19 @@ private fun ListHeader(playingSong: State<Song?>) {
                 Box(
                     Modifier.align(Alignment.CenterStart)
                 ) {
-                    Text(text = "0/0", style = MaterialTheme.typography.button.copy(fontSize = 16.sp))
+                    Text(text = "0/0", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp))
                 }
                 Box(
                     Modifier.align(Alignment.Center)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.now_play_list), style = MaterialTheme.typography.button.copy(fontSize = 16.sp)
+                        text = stringResource(id = R.string.now_play_list), style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp)
                     )
                 }
                 Box(
                     Modifier.align(Alignment.CenterEnd)
                 ) {
-                    Text(text = stringResource(R.string.clear), style = MaterialTheme.typography.button.copy(fontSize = 16.sp))
+                    Text(text = stringResource(R.string.clear), style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp))
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -177,17 +177,17 @@ private fun MediaItem(
                 .width(54.dp)
                 .height(54.dp)
                 .clip(RoundedCornerShape(6.dp))
-                .background(GRAY3),
+                .background(MaterialTheme.colorScheme.secondaryContainer),
             contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.width(10.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = song.displayName, style = MaterialTheme.typography.subtitle1
+                text = song.displayName, style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = song.artist, style = MaterialTheme.typography.subtitle2, modifier = Modifier.alpha(.5f)
+                text = song.artist, style = MaterialTheme.typography.titleSmall, modifier = Modifier.alpha(.5f)
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
@@ -200,25 +200,31 @@ private fun MediaItem(
                 .width(34.dp)
                 .height(34.dp)
                 .clip(CircleShape)
-                .background(GRAY3)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(10.dp)
         ) {
-            AsyncImage(model = R.drawable.ic_delete, contentDescription = null)
+            AsyncImage(
+                model = R.drawable.ic_delete,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer)
+            )
         }
         Spacer(modifier = Modifier.width(22.dp))
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TitleBar() {
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.background, contentPadding = PaddingValues(horizontal = 22.dp), modifier = Modifier.statusBarsPadding(), elevation = 0.dp
-    ) {
-        Text(
-            text = stringResource(R.string.now_play_list), color = MaterialTheme.colors.onSurface, style = MaterialTheme.typography.h5
-        )
-    }
+        modifier = Modifier.statusBarsPadding(),
+        title = {
+            Text(
+                text = stringResource(R.string.now_play_list), style = MaterialTheme.typography.titleMedium
+            )
+        }
+    )
 }
 
 @Composable

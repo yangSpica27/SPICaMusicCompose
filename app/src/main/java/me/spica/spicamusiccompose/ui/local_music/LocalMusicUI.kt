@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,14 +19,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -45,15 +45,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import me.spica.spicamusiccompose.R
 import me.spica.spicamusiccompose.persistence.entity.Song
-import me.spica.spicamusiccompose.ui.theme.GRAY3
 import me.spica.spicamusiccompose.ui.viewmodel.LocalMusicViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocalMusicUI(localMusicViewModel: LocalMusicViewModel = hiltViewModel()) {
     val songsState = localMusicViewModel.songs.collectAsState(initial = null)
     val listState = rememberLazyListState()
-    Scaffold(backgroundColor = GRAY3) { contentPadding ->
+    Scaffold { contentPadding ->
         Column(modifier = Modifier.padding(contentPadding)) {
             TitleBar()
             Divider(thickness = .5.dp)
@@ -82,7 +82,7 @@ private fun LoadingPage() {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = stringResource(R.string.is_loading), style = MaterialTheme.typography.subtitle1
+                text = stringResource(R.string.is_loading), style = MaterialTheme.typography.titleMedium
             )
         }
     }
@@ -96,8 +96,7 @@ private fun ListPage(
 ) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface),
+            .fillMaxSize(),
         state = lazyListState
     ) {
         item {
@@ -143,17 +142,17 @@ private fun SongItem(song: Song, localMusicViewModel: LocalMusicViewModel) {
                 .width(54.dp)
                 .height(54.dp)
                 .clip(RoundedCornerShape(6.dp))
-                .background(GRAY3),
+                .background(MaterialTheme.colorScheme.secondaryContainer),
             contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.width(10.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = song.displayName, style = MaterialTheme.typography.subtitle1
+                text = song.displayName, style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = song.artist, style = MaterialTheme.typography.subtitle2, modifier = Modifier.alpha(.5f)
+                text = song.artist, style = MaterialTheme.typography.titleMedium, modifier = Modifier.alpha(.5f)
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
@@ -184,10 +183,11 @@ private fun SongItem(song: Song, localMusicViewModel: LocalMusicViewModel) {
                 .width(34.dp)
                 .height(34.dp)
                 .clip(CircleShape)
-                .background(GRAY3)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(4.dp)
         ) {
-            AsyncImage(model = R.drawable.ic_more, contentDescription = null)
+            AsyncImage(model = R.drawable.ic_more, contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer))
         }
         Spacer(modifier = Modifier.width(22.dp))
     }
@@ -209,17 +209,17 @@ private fun EmptyPage() {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TitleBar() {
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.background,
-        contentPadding = PaddingValues(horizontal = 22.dp),
-        modifier = Modifier.statusBarsPadding(), elevation = 0.dp,
-    ) {
-        Text(
-            text = stringResource(R.string.local_music),
-            color = MaterialTheme.colors.onSurface,
-            style = MaterialTheme.typography.h5
-        )
-    }
+        modifier = Modifier.statusBarsPadding(),
+        title = {
+            Text(
+                text = stringResource(R.string.local_music),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    )
 }

@@ -15,10 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,7 +37,7 @@ import me.spica.spicamusiccompose.ui.mine.MineUI
 import me.spica.spicamusiccompose.ui.now_playlist.NowPlayListUI
 import me.spica.spicamusiccompose.ui.player.PlayerUI
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeUI(
     homeViewModel: HomeViewModel = hiltViewModel(),
@@ -161,18 +162,18 @@ fun NavButton(
         ) {
             AsyncImage(
                 model = icon, contentDescription = null, colorFilter = if (isSelected) {
-                    ColorFilter.tint(MaterialTheme.colors.primary)
+                    ColorFilter.tint(MaterialTheme.colorScheme.primary)
                 } else {
-                    ColorFilter.tint(MaterialTheme.colors.onSurface)
+                    ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                 },
                 modifier = Modifier.width(24.dp)
             )
             Spacer(modifier = modifier.height(8.dp))
             Text(
-                text = name, style = MaterialTheme.typography.button, color = if (isSelected) {
-                    MaterialTheme.colors.primary
+                text = name, style = MaterialTheme.typography.bodySmall, color = if (isSelected) {
+                    MaterialTheme.colorScheme.primary
                 } else {
-                    MaterialTheme.colors.onSurface
+                    MaterialTheme.colorScheme.onBackground
                 }
             )
         }

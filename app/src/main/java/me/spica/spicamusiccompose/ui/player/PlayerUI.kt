@@ -15,12 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
@@ -35,8 +35,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import me.spica.spicamusiccompose.R
 import me.spica.spicamusiccompose.persistence.entity.Song
-import me.spica.spicamusiccompose.ui.theme.ColorTheme
-import me.spica.spicamusiccompose.ui.theme.GRAY3
 
 @Composable
 fun PlayerUI(
@@ -75,7 +73,7 @@ private fun EmptyContent() {
         TextButton(onClick = { }) {
             Text(
                 text = stringResource(id = R.string.no_playing),
-                style = MaterialTheme.typography.button
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }
@@ -97,7 +95,7 @@ private fun PlayContent(currentSong: State<Song?>) {
                 .height(configuration.screenWidthDp.dp)
                 .padding(horizontal = 22.dp)
         ) {
-            Card(modifier = Modifier.fillMaxSize(), backgroundColor = GRAY3) {
+            Card(modifier = Modifier.fillMaxSize()) {
 
             }
         }
@@ -154,7 +152,7 @@ private fun ControllerContent() {
                 .width(48.dp)
                 .height(48.dp)
                 .clip(CircleShape)
-                .background(ColorTheme)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(10.dp)
         ) {
             AsyncImage(
@@ -193,9 +191,9 @@ private fun TitleBar(song: Song?) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = song?.displayName ?: "歌曲名称", style = MaterialTheme.typography.subtitle1)
+                Text(text = song?.displayName ?: "歌曲名称", style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(6.dp))
-                Text(text = song?.artist ?: "作曲家", style = MaterialTheme.typography.subtitle2, modifier = Modifier.alpha(.7f))
+                Text(text = song?.artist ?: "作曲家", style = MaterialTheme.typography.titleSmall, modifier = Modifier.alpha(.7f))
             }
             IconButton(onClick = { }) {
                 AsyncImage(

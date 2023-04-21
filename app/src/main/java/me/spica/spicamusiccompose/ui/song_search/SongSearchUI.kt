@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -18,23 +19,27 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -49,30 +54,87 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import me.spica.spicamusiccompose.R
 import me.spica.spicamusiccompose.persistence.entity.Song
-import me.spica.spicamusiccompose.ui.theme.GRAY3
 
 
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SongSearchUI(searchViewModel: SongSearchViewModel = hiltViewModel()) {
 
     val songsState = searchViewModel.songs.collectAsState(initial = null)
 
-    Scaffold(backgroundColor = GRAY3) { contentPadding ->
-        Column(modifier = Modifier.padding(contentPadding)) {
-            SearchBar(searchViewModel = searchViewModel)
-            Box(modifier = Modifier.weight(1f)) {
-                if (songsState.value == null) {
-                    LoadingPage()
-                } else if (songsState.value.isNullOrEmpty()) {
-                    EmptyPage()
-                } else {
-                    ListPage(songsState = songsState)
+
+    val scaffoldState = rememberBottomSheetScaffoldState()
+
+    val scope = rememberCoroutineScope()
+
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        backgroundColor = MaterialTheme.colorScheme.secondary,
+        content = { contentPadding ->
+            Column(modifier = Modifier.padding(contentPadding)) {
+                SearchBar(searchViewModel = searchViewModel)
+                Box(modifier = Modifier.weight(1f)) {
+                    if (songsState.value == null) {
+                        LoadingPage()
+                    } else if (songsState.value.isNullOrEmpty()) {
+                        EmptyPage()
+                    } else {
+                        ListPage(songsState = songsState, scaffoldState = scaffoldState, scope = scope)
+                    }
                 }
             }
+        },
+        sheetPeekHeight = 0.dp,
+        sheetBackgroundColor = Color.Transparent,
+        sheetContentColor = Color.Transparent,
+        sheetElevation = 0.dp,
+        sheetShape = MaterialTheme.shapes.small,
+        sheetContent = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp, horizontal = 22.dp)
+                    .height(500.dp)
+                    .navigationBarsPadding()
+            ) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(MaterialTheme.shapes.large)
+                        .background(Color.White)
+                ) {
+                    Box(
+                        Modifier
+                            .clip(MaterialTheme.shapes.large)
+                            .height(100.dp)
+                            .background(Color.Red)
+                    ) {
+
+                    }
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .height(12.dp)
+                    )
+                    Row(
+                        Modifier
+                            .clip(MaterialTheme.shapes.large)
+                            .height(300.dp)
+                            .background(Color.Red)
+                    ) {
+
+                    }
+                }
+
+            }
         }
-    }
+    )
 }
 
 @Composable
@@ -101,12 +163,13 @@ private fun LoadingPage() {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = stringResource(R.string.is_loading), style = MaterialTheme.typography.subtitle1
+                text = stringResource(R.string.is_loading), style = MaterialTheme.typography.titleSmall
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchBar(searchViewModel: SongSearchViewModel) {
     val state = remember { mutableStateOf(TextFieldValue("")) }
@@ -153,9 +216,6 @@ private fun SearchBar(searchViewModel: SongSearchViewModel) {
             },
             singleLine = true,
             shape = RectangleShape,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.background,
-            ),
             placeholder = {
                 Text(text = stringResource(R.string.pls_enter_keyword), color = Color.DarkGray)
             }
@@ -164,19 +224,21 @@ private fun SearchBar(searchViewModel: SongSearchViewModel) {
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ListPage(songsState: State<List<Song>?>) {
+private fun ListPage(songsState: State<List<Song>?>, scaffoldState: BottomSheetScaffoldState, scope: CoroutineScope) {
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         item {
             Spacer(modifier = Modifier.height(12.dp))
         }
         items(songsState.value ?: listOf()) {
             Column {
-                SongItem(song = it)
+                SongItem(song = it, scaffoldState = scaffoldState, scope = scope)
             }
         }
         item {
@@ -195,8 +257,9 @@ private fun ListPage(songsState: State<List<Song>?>) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun SongItem(song: Song) {
+private fun SongItem(song: Song, scaffoldState: BottomSheetScaffoldState, scope: CoroutineScope) {
     Row(
         modifier = Modifier
             .clickable {
@@ -213,17 +276,17 @@ private fun SongItem(song: Song) {
                 .width(54.dp)
                 .height(54.dp)
                 .clip(RoundedCornerShape(6.dp))
-                .background(GRAY3),
+                .background(MaterialTheme.colorScheme.secondary),
             contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.width(10.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = song.displayName, style = MaterialTheme.typography.subtitle1
+                text = song.displayName, style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = song.artist, style = MaterialTheme.typography.subtitle2, modifier = Modifier.alpha(.5f)
+                text = song.artist, style = MaterialTheme.typography.titleSmall, modifier = Modifier.alpha(.5f)
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
@@ -250,11 +313,17 @@ private fun SongItem(song: Song) {
         }
         Spacer(modifier = Modifier.width(12.dp))
         IconButton(
-            onClick = { }, modifier = Modifier
+            onClick = {
+                scope.launch {
+                    scaffoldState.bottomSheetState.apply {
+                        if (isCollapsed) expand() else collapse()
+                    }
+                }
+            }, modifier = Modifier
                 .width(34.dp)
                 .height(34.dp)
                 .clip(CircleShape)
-                .background(GRAY3)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(4.dp)
         ) {
             AsyncImage(model = R.drawable.ic_more, contentDescription = null)

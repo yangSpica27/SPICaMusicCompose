@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -97,7 +97,7 @@ fun StoragePermissionPager(pagerState: PagerState) {
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = stringResource(R.string.lets_go),
-                        style = MaterialTheme.typography.h4,
+                        style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -112,7 +112,7 @@ fun StoragePermissionPager(pagerState: PagerState) {
                     Spacer(modifier = Modifier.height(24.dp))
                     Text(
                         text = stringResource(R.string.please_give_permisstion_help_text),
-                        style = MaterialTheme.typography.h6, modifier = Modifier.alpha(.6f)
+                        style = MaterialTheme.typography.titleMedium, modifier = Modifier.alpha(.6f)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                 }

@@ -9,10 +9,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -29,7 +29,6 @@ import me.spica.spicamusiccompose.persistence.entity.Song
 import me.spica.spicamusiccompose.ui.common.ViewModelProvider
 import me.spica.spicamusiccompose.ui.navgation.NavScreen
 import me.spica.spicamusiccompose.ui.navgation.Navigator
-import me.spica.spicamusiccompose.ui.theme.GRAY3
 import me.spica.spicamusiccompose.ui.viewmodel.LocalMusicViewModel
 import me.spica.spicamusiccompose.ui.viewmodel.PlayStateViewModel
 
@@ -107,7 +106,7 @@ fun MineUI(
                 AnimatedVisibility(visible = localSongs.value.isNotEmpty()) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "最近添加", style = MaterialTheme.typography.h6, modifier = Modifier
+                            text = "最近添加", style = MaterialTheme.typography.titleMedium, modifier = Modifier
                                 .alpha(.8f)
                                 .padding(start = 22.dp)
                         )
@@ -134,7 +133,7 @@ fun MineUI(
                 AnimatedVisibility(visible = localSongs.value.isNotEmpty()) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "最近添加", style = MaterialTheme.typography.h6, modifier = Modifier
+                            text = "最近添加", style = MaterialTheme.typography.titleLarge, modifier = Modifier
                                 .alpha(.8f)
                                 .padding(start = 22.dp)
                         )
@@ -177,7 +176,8 @@ fun MineFuncButton(
                     .width(64.dp)
                     .height(64.dp)
                     .clip(CircleShape)
-                    .background(GRAY3), contentAlignment = Alignment.Center
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center
             ) {
                 AsyncImage(
                     model = icon, contentDescription = null, modifier = Modifier
@@ -187,7 +187,7 @@ fun MineFuncButton(
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = title, style = MaterialTheme.typography.button, modifier = Modifier.alpha(.8f)
+                text = title, style = MaterialTheme.typography.bodySmall, modifier = Modifier.alpha(.8f)
             )
         }
     }
@@ -195,7 +195,7 @@ fun MineFuncButton(
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SongCard(song: Song, onClick: () -> Unit) {
     val width = 108.dp
@@ -207,17 +207,17 @@ private fun SongCard(song: Song, onClick: () -> Unit) {
                 model = song.getCoverUri(), contentDescription = null, modifier = Modifier
                     .width(width)
                     .height(width)
-                    .background(GRAY3)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = song.displayName, style = MaterialTheme.typography.subtitle1, modifier = Modifier
+                text = song.displayName, style = MaterialTheme.typography.labelLarge, modifier = Modifier
                     .width(width)
                     .padding(horizontal = 8.dp), maxLines = 1
             )
             Text(
                 text = song.artist,
-                style = MaterialTheme.typography.subtitle2,
+                style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier
                     .width(width)
                     .padding(horizontal = 8.dp)
