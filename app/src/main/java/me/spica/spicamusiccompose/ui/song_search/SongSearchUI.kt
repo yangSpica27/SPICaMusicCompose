@@ -60,7 +60,6 @@ import me.spica.spicamusiccompose.R
 import me.spica.spicamusiccompose.persistence.entity.Song
 
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SongSearchUI(searchViewModel: SongSearchViewModel = hiltViewModel()) {
@@ -74,7 +73,7 @@ fun SongSearchUI(searchViewModel: SongSearchViewModel = hiltViewModel()) {
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
-        backgroundColor = MaterialTheme.colorScheme.secondary,
+        backgroundColor = MaterialTheme.colorScheme.background,
         content = { contentPadding ->
             Column(modifier = Modifier.padding(contentPadding)) {
                 SearchBar(searchViewModel = searchViewModel)
@@ -218,7 +217,7 @@ private fun SearchBar(searchViewModel: SongSearchViewModel) {
             shape = RectangleShape,
             placeholder = {
                 Text(text = stringResource(R.string.pls_enter_keyword), color = Color.DarkGray)
-            }
+            },
         )
     }
 
@@ -276,7 +275,7 @@ private fun SongItem(song: Song, scaffoldState: BottomSheetScaffoldState, scope:
                 .width(54.dp)
                 .height(54.dp)
                 .clip(RoundedCornerShape(6.dp))
-                .background(MaterialTheme.colorScheme.secondary),
+                .background(MaterialTheme.colorScheme.secondaryContainer),
             contentScale = ContentScale.Crop
         )
 
@@ -323,10 +322,12 @@ private fun SongItem(song: Song, scaffoldState: BottomSheetScaffoldState, scope:
                 .width(34.dp)
                 .height(34.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(4.dp)
         ) {
-            AsyncImage(model = R.drawable.ic_more, contentDescription = null)
+            AsyncImage(model = R.drawable.ic_more,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer))
         }
         Spacer(modifier = Modifier.width(22.dp))
     }
