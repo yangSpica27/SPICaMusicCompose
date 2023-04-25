@@ -1,14 +1,28 @@
 package me.spica.spicamusiccompose.service
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.media.AudioManager
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
-import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.audio.*
+import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.DefaultRenderersFactory
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackException
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Renderer
+import com.google.android.exoplayer2.audio.AudioAttributes
+import com.google.android.exoplayer2.audio.AudioCapabilities
+import com.google.android.exoplayer2.audio.AudioRendererEventListener
+import com.google.android.exoplayer2.audio.AudioSink
+import com.google.android.exoplayer2.audio.DefaultAudioSink
+import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
@@ -36,6 +50,9 @@ class MusicService : MediaBrowserServiceCompat(), Player.Listener, IPlayer, Medi
     private lateinit var exoPlayer: ExoPlayer
 
     private lateinit var mediaSessionComponent: MediaSessionComponent
+
+
+    private val systemReceiver = PlaybackReceiver()
 
     override fun onCreate() {
         super.onCreate()
@@ -105,6 +122,18 @@ class MusicService : MediaBrowserServiceCompat(), Player.Listener, IPlayer, Medi
         PlaybackStateManager.getInstance().registerPlayer(this)
         foregroundManager = ForegroundManager(this)
         mediaSessionComponent = MediaSessionComponent(this, this)
+        registerReceiver(
+            systemReceiver,
+            IntentFilter().apply {
+                addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+                addAction(AudioManager.ACTION_HEADSET_PLUG)
+                addAction(ACTION_INC_REPEAT_MODE)
+                addAction(ACTION_INVERT_SHUFFLE)
+                addAction(ACTION_SKIP_PREV)
+                addAction(ACTION_PLAY_PAUSE)
+                addAction(ACTION_SKIP_NEXT)
+                addAction(ACTION_EXIT)
+            })
     }
 
 
@@ -187,6 +216,7 @@ class MusicService : MediaBrowserServiceCompat(), Player.Listener, IPlayer, Medi
         exoPlayer.release()
         foregroundManager.release()
         mediaSessionComponent.release()
+        unregisterReceiver(systemReceiver)
     }
 
     override fun loadSong(song: Song?, play: Boolean) {
@@ -207,6 +237,12 @@ class MusicService : MediaBrowserServiceCompat(), Player.Listener, IPlayer, Medi
         )
     }
 
+    private fun stopAndSave() {
+        hasPlayed = false
+        if (foregroundManager.tryStopForeground()) {
+            // TODO-- 保存当前播放状态 --
+        }
+    }
 
     override fun seekTo(positionMs: Long) {
         exoPlayer.seekTo(positionMs)
@@ -232,6 +268,48 @@ class MusicService : MediaBrowserServiceCompat(), Player.Listener, IPlayer, Medi
         if (hasPlayed) {
             if (!foregroundManager.tryStartForeground(notification)) {
                 notification.post()
+            }
+        }
+    }
+
+    private inner class PlaybackReceiver : BroadcastReceiver() {
+        private var initialHeadsetPlugEventHandled = false
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                // 有线耳机的插入和断开广播
+                AudioManager.ACTION_HEADSET_PLUG -> {
+                    when (intent.getIntExtra("state", -1)) {
+                        0 -> pauseFromHeadsetPlug() // 设备断开连接广播
+                        1 -> playFromHeadsetPlug() // 设备连接广播
+                    }
+
+                    initialHeadsetPlugEventHandled = true
+                }
+                // 当音频输出切回到内置扬声器时的广播（自动暂停）
+                AudioManager.ACTION_AUDIO_BECOMING_NOISY -> pauseFromHeadsetPlug()
+                ACTION_PLAY_PAUSE ->
+                    PlaybackStateManager.getInstance().setPlaying(!PlaybackStateManager.getInstance().playerState.isPlaying)
+
+                ACTION_SKIP_PREV -> PlaybackStateManager.getInstance().playPre()
+                ACTION_SKIP_NEXT -> PlaybackStateManager.getInstance().playNext()
+                ACTION_EXIT -> {
+                    PlaybackStateManager.getInstance().setPlaying(false)
+                    stopAndSave()
+                }
+            }
+        }
+
+        private fun playFromHeadsetPlug() {
+            if (PlaybackStateManager.getInstance().getCurrentSong() != null &&
+                initialHeadsetPlugEventHandled
+            ) {
+                PlaybackStateManager.getInstance().setPlaying(true)
+            }
+        }
+
+        private fun pauseFromHeadsetPlug() {
+            if (PlaybackStateManager.getInstance().getCurrentSong() != null) {
+                PlaybackStateManager.getInstance().setPlaying(false)
             }
         }
     }

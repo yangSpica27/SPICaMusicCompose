@@ -6,13 +6,13 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
-import me.spica.spicamusiccompose.service.ForegroundServiceNotification
-import me.spica.spicamusiccompose.service.MusicService
 import me.spica.spicamusiccompose.BuildConfig
 import me.spica.spicamusiccompose.R
-import me.spica.spicamusiccompose.ext.newBroadcastPendingIntent
-import me.spica.spicamusiccompose.ext.newMainPendingIntent
 import me.spica.spicamusiccompose.playback.RepeatMode
+import me.spica.spicamusiccompose.service.ForegroundServiceNotification
+import me.spica.spicamusiccompose.service.MusicService
+import me.spica.spicamusiccompose.ui.ext.newBroadcastPendingIntent
+import me.spica.spicamusiccompose.ui.ext.newMainPendingIntent
 
 @SuppressLint("RestrictedApi")
 class NotificationComponent(private val context: Context, sessionToken: MediaSessionCompat.Token) :
@@ -29,18 +29,17 @@ class NotificationComponent(private val context: Context, sessionToken: MediaSes
         setSilent(true)
         setContentIntent(context.newMainPendingIntent())
         setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-        addAction(buildRepeatAction(context, RepeatMode.NONE))
+
         addAction(buildAction(context, MusicService.ACTION_SKIP_PREV, R.drawable.ic_pre))
         addAction(buildPlayPauseAction(context, true))
         addAction(buildAction(context, MusicService.ACTION_SKIP_NEXT, R.drawable.ic_next))
-        addAction(buildAction(context, MusicService.ACTION_EXIT, R.drawable.ic_close))
 
         setStyle(
             androidx.media.app
                 .NotificationCompat
                 .MediaStyle()
                 .setMediaSession(sessionToken)
-                .setShowActionsInCompactView(1, 2, 3)
+                .setShowActionsInCompactView(0,1,2)
         )
     }
 
@@ -80,13 +79,11 @@ class NotificationComponent(private val context: Context, sessionToken: MediaSes
 
 
     fun updatePlaying(isPlaying: Boolean) {
-        mActions[2] = buildPlayPauseAction(context, isPlaying)
+        mActions[1] = buildPlayPauseAction(context, isPlaying)
     }
 
 
-    fun updateRepeatMode(repeatMode: RepeatMode) {
-        mActions[0] = buildRepeatAction(context, repeatMode)
-    }
+
 
 
     private companion object {

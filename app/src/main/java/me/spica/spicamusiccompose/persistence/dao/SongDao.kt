@@ -33,6 +33,13 @@ interface SongDao {
     )
     fun getsSongsFromNameSync(name: String): List<Song>
 
+
+    @Query(
+        "SELECT * FROM song WHERE (displayName LIKE '%' ||:name|| '%'" +
+            "OR artist LIKE '%' ||:name|| '%') AND `like` == 1"
+    )
+    fun getCollectSongsFromNameSync(name: String): List<Song>
+
     @Query("SELECT * FROM song WHERE songId == :id")
     fun getSongWithId(id: Long): Song
 

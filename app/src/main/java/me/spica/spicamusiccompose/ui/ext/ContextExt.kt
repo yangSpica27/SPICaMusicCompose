@@ -1,4 +1,4 @@
-package me.spica.spicamusiccompose.ext
+package me.spica.spicamusiccompose.ui.ext
 
 import android.app.PendingIntent
 import android.content.Context
