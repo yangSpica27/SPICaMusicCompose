@@ -90,7 +90,9 @@ fun MineUI(
                     MineFuncButton(
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { }, icon = R.drawable.ic_collection_records, title = stringResource(id = R.string.collected), tintColor = Color(0xffF44336)
+                            .clickable {
+                                navigator.navigate(NavScreen.Collect.route)
+                            }, icon = R.drawable.ic_collection_records, title = stringResource(id = R.string.collected), tintColor = Color(0xffF44336)
                     )
                     MineFuncButton(
                         modifier = Modifier

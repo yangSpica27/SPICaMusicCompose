@@ -22,7 +22,7 @@ class CollectListViewModel @Inject constructor(private val songDao: SongDao) : V
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _songs.emit(songDao.getAllSync())
+            _songs.emit(songDao.getAllLikeSongSync())
         }
     }
 
@@ -31,7 +31,7 @@ class CollectListViewModel @Inject constructor(private val songDao: SongDao) : V
             if (!TextUtils.isEmpty(keyWords)) {
                 _songs.emit(songDao.getCollectSongsFromNameSync(keyWords))
             } else {
-                _songs.emit(songDao.getAllSync())
+                _songs.emit(songDao.getAllLikeSongSync())
             }
 
         }

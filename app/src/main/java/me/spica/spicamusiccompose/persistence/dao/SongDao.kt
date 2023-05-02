@@ -58,6 +58,8 @@ interface SongDao {
     @Query("SELECT * FROM song WHERE `like` == 1")
     fun getAllLikeSong(): Flow<List<Song>>
 
+    @Query("SELECT * FROM song WHERE `like` == 1")
+    fun getAllLikeSongSync(): List<Song>
 
     @Query("DELETE FROM song")
     suspend fun deleteAll()

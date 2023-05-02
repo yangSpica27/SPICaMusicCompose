@@ -3,6 +3,7 @@ package me.spica.spicamusiccompose.ui.main
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import me.spica.spicamusiccompose.ui.collect_list.CollectListUI
 import me.spica.spicamusiccompose.ui.common.ProvideMultiViewModel
 import me.spica.spicamusiccompose.ui.home.HomeUI
 import me.spica.spicamusiccompose.ui.local_music.LocalMusicUI
@@ -33,7 +34,11 @@ fun MainUI() {
                 composable(route = NavScreen.SongSearch.route) {
                     SongSearchUI()
                 }
+                composable(route = NavScreen.Collect.route) {
+                    CollectListUI()
+                }
             }
+
         }
     }
 }
