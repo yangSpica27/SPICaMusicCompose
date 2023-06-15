@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -35,6 +36,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import me.spica.spicamusiccompose.R
 import me.spica.spicamusiccompose.persistence.entity.Song
+import me.spica.spicamusiccompose.ui.common.ViewModelProvider
+import me.spica.spicamusiccompose.ui.viewmodel.PlayStateViewModel
+import me.spica.spicamusiccompose.utils.formatDurationSecs
+import me.spica.spicamusiccompose.utils.msToSecs
 
 @Composable
 fun PlayerUI(
@@ -45,7 +50,8 @@ fun PlayerUI(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Crossfade(targetState = currentSong.value == null) { isEmpty ->
+        Crossfade(targetState = currentSong.value == null)
+        { isEmpty ->
             if (isEmpty) {
                 EmptyContent()
             } else {
@@ -100,32 +106,41 @@ private fun PlayContent(currentSong: State<Song?>) {
             }
         }
         Spacer(modifier = Modifier.weight(1f))
-        SeekContent(song = currentSong.value, positionDs = 0, isPlay = false)
+        SeekContent()
         ControllerContent()
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(100.dp))
     }
 }
 
 @Composable
 private fun SeekContent(
-    song: Song?,
-    positionDs: Long,
-    isPlay: Boolean
+    playStateViewModel: PlayStateViewModel = ViewModelProvider.playState
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                horizontal = 22.dp, vertical = 16.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = "00:00")
-        Spacer(modifier = Modifier.width(8.dp))
-        Slider(value = 0f, onValueChange = {}, modifier = Modifier.weight(1f))
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = "00:00")
+
+    val currentSongState = playStateViewModel.currentSongFlow.collectAsState(initial = null)
+    val currentDs = playStateViewModel.positionDs.collectAsState(initial = 0)
+    AnimatedVisibility(visible = currentSongState.value != null) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 22.dp, vertical = 16.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = currentDs.value.msToSecs().formatDurationSecs())
+            Spacer(modifier = Modifier.width(8.dp))
+            Slider(
+                value = currentDs.value.toFloat(), onValueChange = {
+
+                }, modifier = Modifier.weight(1f),
+                valueRange = 0f..(currentSongState.value?.duration?.toFloat()?:1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = currentSongState.value?.duration?.msToSecs()?.formatDurationSecs() ?: "--:--")
+        }
     }
+
 }
 
 @Composable

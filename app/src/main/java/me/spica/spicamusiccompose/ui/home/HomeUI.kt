@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.material3.Divider
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -47,18 +47,12 @@ fun HomeUI(
     val playingSong = playStateViewModel.currentSongFlow.collectAsState(initial = null)
     val playList = playStateViewModel.songsList.collectAsState(initial = listOf())
 
-    Scaffold(
-        bottomBar = {
-            Column {
-                Divider(modifier = Modifier.fillMaxWidth(), thickness = .5.dp)
-                BottomNavBar(homeViewModel)
-            }
-        }
-    ) { contentPadding ->
+    Scaffold{ contentPadding ->
         Box(
             modifier = Modifier
                 .padding(contentPadding)
-                .fillMaxSize()
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
         ) {
             Column(Modifier.fillMaxSize()) {
                 HorizontalPager(
@@ -75,9 +69,9 @@ fun HomeUI(
                             2 -> MineUI()
                         }
                     }
-
                 }
             }
+            BottomNavBar(homeViewModel)
         }
     }
 }
@@ -99,48 +93,60 @@ private fun LoadingContent() {
 @Composable
 private fun BottomNavBar(homeViewModel: HomeViewModel) {
     val coroutineScope = rememberCoroutineScope()
-    Row(
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding(),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(
+                start = 14.dp,
+                end = 14.dp
+            )
+            .navigationBarsPadding()
     ) {
-        NavButton(
-            isSelected = homeViewModel.pagerState.currentPage == 0,
-            icon = R.drawable.ic_current_list,
-            name = stringResource(id = R.string.now_play_list),
-            modifier = Modifier
-                .weight(1f)
-                .clickable {
-                    coroutineScope.launch {
-                        homeViewModel.selectBottomNav(0)
-                    }
-                }
-        )
-        NavButton(
-            isSelected = homeViewModel.pagerState.currentPage == 1,
-            icon = R.drawable.ic_nav_player,
-            name = stringResource(id = R.string.now_playing),
-            modifier = Modifier
-                .weight(1f)
-                .clickable(onClick = {
-                    coroutineScope.launch {
-                        homeViewModel.selectBottomNav(1)
-                    }
-                })
-        )
-        NavButton(
-            isSelected = homeViewModel.pagerState.currentPage == 2,
-            icon = R.drawable.ic_mine,
-            name = stringResource(id = R.string.mine),
-            modifier = Modifier
-                .weight(1f)
-                .clickable {
-                    coroutineScope.launch {
-                        homeViewModel.selectBottomNav(2)
-                    }
-                }
-        )
+        Card {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                NavButton(
+                    isSelected = homeViewModel.pagerState.currentPage == 0,
+                    icon = R.drawable.ic_current_list,
+                    name = stringResource(id = R.string.now_play_list),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            coroutineScope.launch {
+                                homeViewModel.selectBottomNav(0)
+                            }
+                        }
+                )
+                NavButton(
+                    isSelected = homeViewModel.pagerState.currentPage == 1,
+                    icon = R.drawable.ic_nav_player,
+                    name = stringResource(id = R.string.now_playing),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable(onClick = {
+                            coroutineScope.launch {
+                                homeViewModel.selectBottomNav(1)
+                            }
+                        })
+                )
+                NavButton(
+                    isSelected = homeViewModel.pagerState.currentPage == 2,
+                    icon = R.drawable.ic_mine,
+                    name = stringResource(id = R.string.mine),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            coroutineScope.launch {
+                                homeViewModel.selectBottomNav(2)
+                            }
+                        }
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 

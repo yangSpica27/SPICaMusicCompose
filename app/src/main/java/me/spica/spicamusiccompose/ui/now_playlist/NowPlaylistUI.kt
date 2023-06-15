@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -56,18 +57,21 @@ fun NowPlayListUI(
     songList: State<List<Song>>,
     playingSong: State<Song?>
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Crossfade(targetState = songList.value.isEmpty()) { isEmpty ->
-            if (isEmpty) {
-                EmptyPage()
-            } else {
-                SongList(
-                    listState = listState, songList = songList, playingSong = playingSong
-                )
+    Scaffold {
+        paddingValues ->
+        Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+            Crossfade(targetState = songList.value.isEmpty()) { isEmpty ->
+                if (isEmpty) {
+                    EmptyPage()
+                } else {
+                    SongList(
+                        listState = listState, songList = songList, playingSong = playingSong
+                    )
+                }
             }
         }
-
     }
+
 }
 
 @Composable

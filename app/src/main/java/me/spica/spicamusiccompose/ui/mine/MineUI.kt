@@ -56,19 +56,6 @@ fun MineUI(
                 )
             }
 
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    AsyncImage(
-                        model = R.drawable.ic_box, contentDescription = null, modifier = Modifier.width(64.dp)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = stringResource(id = R.string.app_name))
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
-
 
 
             item {

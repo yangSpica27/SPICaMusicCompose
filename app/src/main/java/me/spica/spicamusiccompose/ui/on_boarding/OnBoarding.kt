@@ -114,7 +114,7 @@ fun StoragePermissionPager(pagerState: PagerState) {
                         text = stringResource(R.string.please_give_permisstion_help_text),
                         style = MaterialTheme.typography.titleMedium, modifier = Modifier.alpha(.6f)
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
             if (permissionState.status.isGranted) {
